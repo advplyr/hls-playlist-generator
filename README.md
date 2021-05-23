@@ -13,8 +13,6 @@ In order to generate an accurate playlist, hls-playlist-generator first extracts
 
 ## Installation
 
-Use the package manager  to install foobar.
-
 ```bash
 npm install hls-playlist-generator
 ```
