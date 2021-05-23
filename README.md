@@ -18,9 +18,13 @@ Use the package manager  to install foobar.
 ```bash
 npm install hls-playlist-generator
 ```
-or for CLI usage
+or for CLI
 ```bash
 npm install -g hls-playlist-generator
+```
+or use CLI without installing via NPX
+```bash
+npx hls-playlist-generator 'path-to/media-file.mkv'
 ```
 
 ## Usage
@@ -37,6 +41,8 @@ hpg('./path-to/media-file.mkv', 3)
 // or (target segment length defaults to 3)
 hpg('./path-to/media-file.mkv')
 ```
+
+<img src="https://raw.githubusercontent.com/mcoop320/hls-playlist-generator/master/m3u8_sample.png" />
 
 ## CLI Usage
 

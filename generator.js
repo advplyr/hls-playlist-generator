@@ -102,6 +102,7 @@ function buildPlaylistStr(segment_lengths) {
 
   var playlist = `#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-ALLOW-CACHE:NO\n#EXT-X-TARGETDURATION:${Math.ceil(largest_segment)}\n#EXT-X-MEDIA-SEQUENCE:0\n#EXT-X-PLAYLIST-TYPE:VOD\n`
   playlist += playlist_segments.join('\n')
+  playlist += '\n#EXT-X-ENDLIST'
   return playlist
 }
 
