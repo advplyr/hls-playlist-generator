@@ -1,0 +1,28 @@
+{
+  "name": "hls-playlist-generator",
+  "version": "1.0.0",
+  "description": "Gets accurate HLS segment lengths for a video file by using key frames, then optionally generates an HLS .m3u8 playlist.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node cli",
+    "dev": "set LOG_LEVEL=1&&node cli"
+  },
+  "bin": {
+    "hls-playlist-generator": "cli.js",
+    "@mcoop320/hls-playlist-generator": "cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcoop320/hls-playlist-generator.git"
+  },
+  "keywords": [
+    "hls",
+    "m3u8",
+    "playlist",
+    "vod",
+    "ffprobe"
+  ],
+  "author": "mcoop320",
+  "license": "MIT",
+  "dependencies": {}
+}
