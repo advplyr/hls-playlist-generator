@@ -7,14 +7,14 @@ var ffprobeKeyframes = require('./extractors/ffprobe-keyframes')
 var mp4Keyframes = require('./extractors/mp4-keyframes')
 var mkvKeyframes = require('./extractors/mkv-keyframes')
 
-process.env.IS_DEBUG = process.env.IS_DEBUG === '0' ? false : !!process.env.DEBUG
+process.env.IS_DEBUG = process.env.IS_DEBUG === '0' ? false : !!process.env.IS_DEBUG
 
 async function fetchKeyframes(keyframeFn, filepath) {
   try {
     var startTime = Date.now()
     var keyframes = await keyframeFn(filepath)
     var elapsed = ((Date.now() - startTime) / 1000)
-    Logger.info('>', keyframeFn.name, 'extracted', keyframes.length, 'keyframes in', elapsed.toFixed(2), 's', 'Sample keyframes:', keyframes.slice(0, 10).join(', ') + '...')
+    Logger.info('>', keyframeFn.name, 'extracted', keyframes.length, 'keyframes in', Number(elapsed.toFixed(2)), 's', ' | Sample keyframes:', keyframes.slice(0, 10).join(', ') + '...')
     return keyframes
   } catch (err) {
     Logger.error('Failed to fetch keyframes', err)
