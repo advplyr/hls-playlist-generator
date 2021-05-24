@@ -14,7 +14,9 @@ async function fetchKeyframes(keyframeFn, filepath) {
     var startTime = Date.now()
     var keyframes = await keyframeFn(filepath)
     var elapsed = ((Date.now() - startTime) / 1000)
-    Logger.info('>', keyframeFn.name, 'extracted', keyframes.length, 'keyframes in', Number(elapsed.toFixed(2)), 's', ' | Sample keyframes:', keyframes.slice(0, 10).join(', ') + '...')
+
+    var sampleKeyframesString = process.env.IS_DEBUG === '1' ? ' | Sample keyframes: ' + keyframes.slice(0, 10).join(', ') + '...' : ''
+    Logger.info('>', keyframeFn.name, 'extracted', keyframes.length, 'keyframes in', Number(elapsed.toFixed(2)), 'seconds', sampleKeyframesString)
     return keyframes
   } catch (err) {
     Logger.error('Failed to fetch keyframes', err)
