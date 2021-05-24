@@ -57,7 +57,7 @@ async function buildAndSavePlaylist(outputpath, segment_lengths) {
   try {
     await fs.writeFile(outputpath, playlist)
     logger.info(`Playlist written to ${outputpath} with ${segment_lengths.length} segments`)
-    return true
+    return segment_lengths.length
   } catch (err) {
     logger.error('Failed to save playlist file', err)
     return false

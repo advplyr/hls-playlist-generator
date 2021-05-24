@@ -36,7 +36,7 @@ npx hls-playlist-generator 'path-to/media-file.mkv'
 ```es6
 var hpg = require('hls-playlist-generator')
 
-// Write the .m3u8 playlist to the output file
+// Write the .m3u8 playlist to the output file - Returns number of segments
 hpg('./path-to/media-file.mkv', './path-to/playlist.m3u8', 3)
 
 // Return an array of segment lengths
