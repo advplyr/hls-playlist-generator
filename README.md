@@ -5,7 +5,13 @@ Gets accurate HLS segment lengths for a video file by using key frames, then opt
 ### Background
 When direct streaming a video via HLS, the segment lengths are determined by the key frames.
 
-In order to generate an accurate playlist, hls-playlist-generator first extracts the key frames using `ffprobe` and uses the target segment length specified to choose the correct segment lengths that `ffmpeg` would use.
+In order to generate an accurate playlist, hls-playlist-generator first extracts the key frames using `ffprobe`, `mp4box`, or `matroska` depending on the container, then uses the target segment length to choose the correct lengths that `ffmpeg` would use.
+
+.mp4 files will use `mp4box` to extract keyframes (takes < 1s)
+.mkv files will use `matroska` to extract keyframes (takes < 1s)
+all other containers will use `ffprobe` (takes 1 - 30s)
+
+Thanks to [Ivshti/retrieve-keyframes](https://github.com/Ivshti/retrieve-keyframes) for the fast .mp4 and .mkv keyframe extraction
 
 ## Requirements
 

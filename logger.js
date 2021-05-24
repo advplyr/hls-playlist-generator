@@ -1,5 +1,5 @@
 module.exports.debug = (...msg) => {
-  if (process.env.LOG_LEVEL <= 0) return
+  if (!process.env.IS_DEBUG) return
   console.log(...msg)
 }
 

@@ -1,60 +1,5 @@
-var spawn = require('child_process').spawn
 var fs = require('fs').promises
-var Path = require('path')
 var logger = require('./logger')
-
-function probe(args, cmd = 'ffprobe') {
-  return new Promise((resolve) => {
-    var proc = spawn(cmd, args, { stdio: ['pipe', 'pipe', 'inherit'] })
-    var buff = ''
-    proc.stdout.setEncoding("utf8")
-    proc.stdout.on('data', function (data) {
-      buff += data
-    })
-    proc.on('close', function () {
-      resolve(buff)
-    })
-    proc.on('error', (err) => {
-      logger.debug('Err', err)
-      resolve(null)
-    })
-  })
-}
-
-async function getKeyFrames(filepath) {
-  var path = Path.resolve(filepath)
-  var probeargs = [
-    '-v', 'error',
-    '-skip_frame', 'nokey',
-    '-show_entries', 'format=duration',
-    '-show_entries', 'stream=duration',
-    '-show_entries', 'packet=pts_time,flags',
-    '-select_streams', 'v',
-    '-of', 'csv',
-    path
-  ]
-  var start = Date.now()
-  var rawKeyframes = await probe(probeargs, 'ffprobe')
-  if (!rawKeyframes) {
-    return false
-  }
-  var keyframelines = rawKeyframes.split(/\r\n/).filter(l => l.length > 1)
-  var formatline = keyframelines.pop()
-
-  var format_duration = Number(formatline.split(',')[1])
-  var streamline = keyframelines.pop().split(',')
-  var stream_duration = Number(streamline[1])
-
-  logger.debug('Format Duration', format_duration, 'Stream Duration', stream_duration)
-  var keyframes = keyframelines.filter(l => l.includes('K_')).map(l => Number(l.split(',')[1]))
-  var dur = Date.now() - start
-  logger.info(`${keyframes.length} Keyframes found in ${(dur / 1000).toFixed(2)}s`)
-  logger.debug(keyframes)
-  return {
-    keyframes,
-    duration: stream_duration || format_duration
-  }
-}
 
 function keyframesToSegmentLengths(keyframes, duration, segment_length) {
   var last_segment = 0
@@ -86,8 +31,9 @@ function keyframesToSegmentLengths(keyframes, duration, segment_length) {
   segment_lengths.push(Number(remaining_segment_length.toFixed(3)))
   return segment_lengths
 }
+module.exports.getSegmentLengths = keyframesToSegmentLengths
 
-function buildPlaylistStr(segment_lengths) {
+function getPlaylistString(segment_lengths) {
   var playlist_segments = []
   var seg_index = 0
   var largest_segment = 0
@@ -106,23 +52,8 @@ function buildPlaylistStr(segment_lengths) {
   return playlist
 }
 
-async function start(filepath, outputpath = null, segment_length = 3) {
-  if (outputpath) {
-    logger.info(`Generating playlist for "${Path.basename(filepath)}" to "${Path.basename(outputpath)}" with target segment length ${segment_length}..`)
-  } else {
-    logger.info(`Generating playlist for "${Path.basename(filepath)}" with target segment length ${segment_length}..`)
-  }
-
-  var keyframeProbeResponse = await getKeyFrames(filepath)
-  if (!keyframeProbeResponse) {
-    return false
-  }
-  var { duration, keyframes } = keyframeProbeResponse
-  var segment_lengths = keyframesToSegmentLengths(keyframes, duration, segment_length)
-  if (!outputpath) {
-    return segment_lengths
-  }
-  var playlist = buildPlaylistStr(segment_lengths)
+async function buildAndSavePlaylist(outputpath, segment_lengths) {
+  var playlist = getPlaylistString(segment_lengths)
   try {
     await fs.writeFile(outputpath, playlist)
     logger.info(`Playlist written to ${outputpath} with ${segment_lengths.length} segments`)
@@ -132,4 +63,4 @@ async function start(filepath, outputpath = null, segment_length = 3) {
     return false
   }
 }
-module.exports = start
+module.exports.buildSavePlaylist = buildAndSavePlaylist
