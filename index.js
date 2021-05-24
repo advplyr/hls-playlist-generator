@@ -50,7 +50,7 @@ module.exports = async (filepath_input, outputpath_input = null, segment_length 
   Logger.info('Extracting keyframes for', filename)
 
   // For debugging .mkv and .mp4 files, additionally get keyframes from ffprobe for comparison
-  if ((process.env.IS_DEBUG === 'true') && (isMp4 || isMkv)) {
+  if ((process.env.IS_DEBUG === '1') && (isMp4 || isMkv)) {
     Logger.debug(getDetailsDescription(details))
     await fetchKeyframes(ffprobeKeyframes, filepath)
   }
