@@ -1,4 +1,5 @@
 var spawn = require('child_process').spawn
+var logger = require('../logger')
 
 // https://coderrocketfuel.com/article/how-to-convert-bytes-to-kb-mb-gb-or-tb-format-in-node-js
 module.exports.prettyBytes = function (bytes) {
