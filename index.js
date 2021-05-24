@@ -7,7 +7,7 @@ var ffprobeKeyframes = require('./extractors/ffprobe-keyframes')
 var mp4Keyframes = require('./extractors/mp4-keyframes')
 var mkvKeyframes = require('./extractors/mkv-keyframes')
 
-process.env.IS_DEBUG = process.env.IS_DEBUG === '0' ? false : !!process.env.IS_DEBUG
+process.env.IS_DEBUG = process.env.IS_DEBUG || '0'
 
 async function fetchKeyframes(keyframeFn, filepath) {
   try {
@@ -32,7 +32,7 @@ function getDetailsDescription(details) {
 
 module.exports = async (filepath_input, outputpath_input = null, segment_length = 3, is_debug) => {
   if (is_debug !== undefined) {
-    process.env.IS_DEBUG = !!is_debug
+    process.env.IS_DEBUG = is_debug
   }
 
   var filepath = Path.resolve(filepath_input)
@@ -48,7 +48,7 @@ module.exports = async (filepath_input, outputpath_input = null, segment_length 
   Logger.info('Extracting keyframes for', filename)
 
   // For debugging .mkv and .mp4 files, additionally get keyframes from ffprobe for comparison
-  if (process.env.IS_DEBUG && (isMp4 || isMkv)) {
+  if ((process.env.IS_DEBUG === 'true') && (isMp4 || isMkv)) {
     Logger.debug(getDetailsDescription(details))
     await fetchKeyframes(ffprobeKeyframes, filepath)
   }

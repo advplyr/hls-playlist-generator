@@ -24,7 +24,7 @@ async function run() {
 
   for (let i = 0; i < files.length; i++) {
     var filepath = files[i]
-    await kpg(filepath, null, 3, true)
+    await kpg(filepath, null, 3, '1')
   }
 }
 run()
