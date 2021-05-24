@@ -1,17 +1,17 @@
 # HLS Playlist Generator
 
-Gets accurate HLS segment lengths for a video file by using key frames, then optionally generates an HLS .m3u8 playlist.
+Gets accurate HLS segment lengths for a video file by using keyframes, then optionally generates an HLS .m3u8 playlist.
 
 ### Background
-When direct streaming a video via HLS, the segment lengths are determined by the key frames.
+When direct streaming a video via HLS, the segment lengths are determined by the keyframes.
 
-In order to generate an accurate playlist, hls-playlist-generator first extracts the key frames using `ffprobe`, `mp4box`, or `matroska` depending on the container, then uses the target segment length to choose the correct lengths that `ffmpeg` would use.
+In order to generate an accurate playlist, hls-playlist-generator first extracts keyframes using `ffprobe`, `mp4box`, or `matroska` depending on the container, then selects correct segments lengths that `ffmpeg` would use based on target segment length.
 
-.mp4 files will use `mp4box` to extract keyframes (takes < 1s)
-.mkv files will use `matroska` to extract keyframes (takes < 1s)
+.mp4 files will use `mp4box` to extract keyframes (takes < 1s)<br />
+.mkv files will use `matroska` to extract keyframes (takes < 1s)<br />
 all other containers will use `ffprobe` (takes 1 - 30s)
 
-Thanks to [Ivshti/retrieve-keyframes](https://github.com/Ivshti/retrieve-keyframes) for the fast .mp4 and .mkv keyframe extraction
+(Thanks to [Ivshti/retrieve-keyframes](https://github.com/Ivshti/retrieve-keyframes) for the fast .mp4 and .mkv keyframe extraction)
 
 ## Requirements
 
