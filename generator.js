@@ -33,13 +33,13 @@ function keyframesToSegmentLengths(keyframes, duration, segment_length) {
 }
 module.exports.getSegmentLengths = keyframesToSegmentLengths
 
-function getPlaylistString(segment_lengths) {
+function getPlaylistString(segment_lengths, segment_name) {
   var playlist_segments = []
   var seg_index = 0
   var largest_segment = 0
   segment_lengths.forEach((segl) => {
     if (segl > largest_segment) largest_segment = segl
-    playlist_segments.push(`#EXTINF:${segl.toFixed(6)},\nindex${seg_index}.ts`)
+    playlist_segments.push(`#EXTINF:${segl.toFixed(6)},\n${segment_name}${seg_index}.ts`)
     seg_index++
   })
 
@@ -52,8 +52,8 @@ function getPlaylistString(segment_lengths) {
   return playlist
 }
 
-async function buildAndSavePlaylist(outputpath, segment_lengths) {
-  var playlist = getPlaylistString(segment_lengths)
+async function buildAndSavePlaylist(outputpath, segment_lengths, segment_name = 'index') {
+  var playlist = getPlaylistString(segment_lengths, segment_name)
   try {
     await fs.writeFile(outputpath, playlist)
     logger.info(`Playlist written to ${outputpath} with ${segment_lengths.length} segments`)

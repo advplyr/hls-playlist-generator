@@ -98,3 +98,22 @@ async function ffprobeDetails(filepath) {
 }
 
 module.exports = ffprobeDetails
+
+module.exports.getDuration = async (filepath) => {
+  var path = Path.resolve(filepath)
+  var probeargs = [
+    '-v', 'error',
+    '-show_format',
+    '-of', 'json',
+    path
+  ]
+  var ffprobeResponse = await runChild(probeargs, 'ffprobe')
+  if (!ffprobeResponse) {
+    return false
+  }
+  ffprobeResponse = JSON.parse(ffprobeResponse)
+  if (!ffprobeResponse.format || !ffprobeResponse.format.duration) {
+    return false
+  }
+  return Number(ffprobeResponse.format.duration)
+}

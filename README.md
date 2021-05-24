@@ -44,6 +44,17 @@ hpg('./path-to/media-file.mkv', 3)
 
 // or (target segment length defaults to 3)
 hpg('./path-to/media-file.mkv')
+
+// If generating multiple playlists for multiple qualities, keyframes only need to be fetched once, so you should use this method:
+var segments = await hpg.segments('./path-to/media-file.mkv', 3)
+// Last parameter specifies name of segments, i.e. "720p" will create 720p1.ts, 720p2.ts, 720p3.ts, ...
+var v480p = hpg.generate(segments, './streams/480p.m3u8', '480p')
+var v720p = hpg.generate(segments, './streams/720p.m3u8', '720p')
+var v1080p = hpg.generate(segments, './streams/1080p.m3u8', '1080p')
+await Promise.all([v480p, v720p, v1080p])
+
+// If you just want keyframes
+var keyframes = await hpg.extract('./path-to/media.mkv')
 ```
 
 <img src="https://raw.githubusercontent.com/mcoop320/hls-playlist-generator/master/m3u8_sample.png" />

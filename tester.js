@@ -8,9 +8,10 @@ var fs = require('fs').promises
 var kpg = require('./index')
 
 const args = process.argv.slice(2)
-var directory = Path.resolve(args[0])
+var input = Path.resolve(args[0])
+var extname = Path.extname(input)
 
-function getFilesInDir() {
+function getFilesInDir(directory) {
   return fs.readdir(directory).then((filepaths) => {
     return filepaths.map(path => Path.join(directory, path))
   }).catch((error) => {
@@ -20,11 +21,16 @@ function getFilesInDir() {
 }
 
 async function run() {
-  var files = await getFilesInDir()
+  if (extname) {
+    var segments = await kpg.segments(input)
+    console.log('Extracted segments', segments)
+  } else {
+    var files = await getFilesInDir(input)
 
-  for (let i = 0; i < files.length; i++) {
-    var filepath = files[i]
-    await kpg(filepath, null, 3, '1')
+    for (let i = 0; i < files.length; i++) {
+      var filepath = files[i]
+      await kpg(filepath, null, 3, '1')
+    }
   }
 }
 run()
