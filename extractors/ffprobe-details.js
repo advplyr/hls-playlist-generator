@@ -71,7 +71,8 @@ async function ffprobeDetails(filepath) {
     '-of', 'json',
     path
   ]
-  var ffprobeResponse = await runChild(probeargs, 'ffprobe')
+  var ffprobeCmd = process.env.FFPROBE_PATH || 'ffprobe'
+  var ffprobeResponse = await runChild(probeargs, ffprobeCmd)
   if (!ffprobeResponse) {
     return false
   }

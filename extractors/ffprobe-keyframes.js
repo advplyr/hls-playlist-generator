@@ -15,7 +15,6 @@ async function getKeyFrames(filepath) {
     path
   ]
   var ffprobeCmd = process.env.FFPROBE_PATH || 'ffprobe'
-  Logger.debug('Ffprobe command', ffprobeCmd)
   var rawKeyframes = await runChild(probeargs, ffprobeCmd)
   if (!rawKeyframes) {
     return false
