@@ -1,6 +1,7 @@
 var { runChild } = require('../utils')
 var Logger = require('../logger')
 var Path = require('path')
+var os = require('os')
 
 async function getKeyFrames(filepath) {
   var path = Path.resolve(filepath)
@@ -19,12 +20,8 @@ async function getKeyFrames(filepath) {
   if (!rawKeyframes) {
     return false
   }
-  var keyframelines = rawKeyframes.split(/\r\n/).filter(l => l.length > 1)
+  var keyframelines = rawKeyframes.split(os.EOL).filter(l => l.length > 1)
   var formatline = keyframelines.pop()
-  if (!formatline) {
-    Logger.debug('Invalid format line', keyframelines)
-    return false
-  }
   var format_duration = Number(formatline.split(',')[1])
   var streamline = keyframelines.pop().split(',')
   var stream_duration = Number(streamline[1])
