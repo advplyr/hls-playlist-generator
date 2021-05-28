@@ -73,7 +73,7 @@ module.exports = async (filepath_input, outputpath_input = null, options = {}) =
   var filepath = Path.resolve(filepath_input)
   var outputpath = outputpath_input ? Path.resolve(outputpath_input) : null
 
-  Logger.debug('Env Vars', prcoess.env.IS_DEBUG, process.env.FFPROBE_PATH)
+  Logger.debug('Env Vars', process.env.IS_DEBUG, process.env.FFPROBE_PATH)
 
   var details = await ffprobeDetails(filepath)
   var keyframes = await extractKeyframes(filepath, details)
