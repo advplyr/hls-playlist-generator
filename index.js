@@ -61,6 +61,9 @@ module.exports = async (filepath_input, outputpath_input = null, options = {}) =
   if (options.debug !== undefined) {
     process.env.IS_DEBUG = options.debug ? '1' : '0'
   }
+  if (options.ffprobePath !== undefined) {
+    process.env.FFPROBE_PATH = options.ffprobePath
+  }
   var print_keyframes = options.keyframes
   var segment_name = options.segmentName
   var segment_length = (options.segmentLength && !isNaN(options.segmentLength)) ? Number(options.segmentLength) : 3
@@ -83,16 +86,31 @@ module.exports = async (filepath_input, outputpath_input = null, options = {}) =
 }
 
 // Returns array of keyframes
-module.exports.extract = async (filepath_input) => {
+module.exports.extract = async (filepath_input, options = {}) => {
+  if (options.debug !== undefined) {
+    process.env.IS_DEBUG = options.debug ? '1' : '0'
+  }
+  if (options.ffprobePath !== undefined) {
+    process.env.FFPROBE_PATH = options.ffprobePath
+  }
+
   var filepath = Path.resolve(filepath_input)
   var keyframes = await extractKeyframes(filepath)
   return keyframes
 }
 
 // Returns array of segments
-module.exports.segments = async (filepath_input, segment_length = 3, duration = null) => {
+module.exports.segments = async (filepath_input, options = {}) => {
+  if (options.debug !== undefined) {
+    process.env.IS_DEBUG = options.debug ? '1' : '0'
+  }
+  if (options.ffprobePath !== undefined) {
+    process.env.FFPROBE_PATH = options.ffprobePath
+  }
+
   var filepath = Path.resolve(filepath_input)
-  var duration = duration || await ffprobeDetails.getDuration(filepath)
+  var segment_length = (options.segmentLength && !isNaN(options.segmentLength)) ? Number(options.segmentLength) : 3
+  var duration = options.duration || await ffprobeDetails.getDuration(filepath)
   var keyframes = await extractKeyframes(filepath)
   return generator.getSegmentLengths(keyframes, duration, segment_length)
 }

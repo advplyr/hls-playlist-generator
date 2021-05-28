@@ -13,7 +13,8 @@ async function getKeyFrames(filepath) {
     '-of', 'csv',
     path
   ]
-  var rawKeyframes = await runChild(probeargs, 'ffprobe')
+  var ffprobeCmd = process.env.FFPROBE_PATH || 'ffprobe'
+  var rawKeyframes = await runChild(probeargs, ffprobeCmd)
   if (!rawKeyframes) {
     return false
   }
