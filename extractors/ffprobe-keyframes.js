@@ -14,7 +14,6 @@ async function getKeyFrames(filepath) {
     path
   ]
   var rawKeyframes = await runChild(probeargs, 'ffprobe')
-  console.log('raw', rawKeyframes)
   if (!rawKeyframes) {
     return false
   }

@@ -7,7 +7,7 @@ var ffprobeKeyframes = require('./extractors/ffprobe-keyframes')
 var mp4Keyframes = require('./extractors/mp4-keyframes')
 var mkvKeyframes = require('./extractors/mkv-keyframes')
 
-process.env.IS_DEBUG = process.env.IS_DEBUG || '0'
+// process.env.IS_DEBUG = process.env.IS_DEBUG || '0'
 
 async function fetchKeyframes(keyframeFn, filepath) {
   try {
@@ -57,24 +57,29 @@ async function extractKeyframes(filepath, details = null) {
   return keyframes
 }
 
-
-module.exports = async (filepath_input, outputpath_input = null, segment_length = 3, is_debug) => {
-  if (is_debug !== undefined) {
-    process.env.IS_DEBUG = is_debug
+module.exports = async (filepath_input, outputpath_input = null, options = {}) => {
+  if (options.debug !== undefined) {
+    process.env.IS_DEBUG = options.debug ? '1' : '0'
   }
-  var filepath = Path.resolve(filepath_input)
+  var print_keyframes = options.keyframes
+  var segment_name = options.segmentName
+  var segment_length = (options.segmentLength && !isNaN(options.segmentLength)) ? Number(options.segmentLength) : 3
 
+  var filepath = Path.resolve(filepath_input)
   var outputpath = outputpath_input ? Path.resolve(outputpath_input) : null
 
   var details = await ffprobeDetails(filepath)
   var keyframes = await extractKeyframes(filepath, details)
+  if (print_keyframes) {
+    console.log('Keyframes', keyframes)
+  }
 
   var segmentLengths = generator.getSegmentLengths(keyframes, details.duration, segment_length)
 
   if (!outputpath) {
     return segmentLengths
   }
-  return generator.buildSavePlaylist(outputpath, segmentLengths)
+  return generator.buildSavePlaylist(outputpath, segmentLengths, segment_name)
 }
 
 // Returns array of keyframes

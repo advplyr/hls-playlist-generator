@@ -1,29 +1,28 @@
 #!/usr/bin/env node
+const { program } = require('commander')
 const generate = require('./index')
 
-const args = process.argv.slice(2)
+program.arguments('<input_path> [output_path]')
+  .option('-s, --segment-length <length>', 'Specify a segment length', '3')
+  .option('-d, --debug', 'Show debug logs')
+  .option('-k, --keyframes', 'Print keyframes')
+  .option('-p, --ffprobe-path <path>', 'Set a path for FFprobe')
+  .option('-n, --segment-name <name>', 'Segment name in m3u8 playlist, i.e. <name>-14.ts', 'index')
+  .parse()
 
-if (args.length === 0) {
-  console.log('Invalid args must specify video file path')
-  return
+const options = program.opts()
+
+if (!options.segmentLength || isNaN(options.segmentLength)) {
+  return console.log('Invalid segment length')
 }
+options.segmentLength = Number(options.segmentLength)
+
+const args = program.args
 
 var fileinput = args[0]
-var segment_length = 3
-var output_path_relative = null
+var output_path_relative = args[1] || null
 
-// If second argument is a number use it as the target segment length
-if (args[1] && !isNaN(args[1])) {
-  segment_length = Number(args[1])
-} else if (args[1] && args[1].length) {
-  output_path_relative = args[1]
-
-  if (args[2] && !isNaN(args[2])) {
-    segment_length = Number(args[2])
-  }
-}
-
-generate(fileinput, output_path_relative, segment_length).then((response) => {
+generate(fileinput, output_path_relative, options).then((response) => {
   if (response === true || response === false) return
   console.log(response)
 })

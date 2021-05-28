@@ -37,13 +37,14 @@ npx hls-playlist-generator 'path-to/media-file.mkv'
 var hpg = require('hls-playlist-generator')
 
 // Write the .m3u8 playlist to the output file - Returns number of segments
-hpg('./path-to/media-file.mkv', './path-to/playlist.m3u8', 3)
+hpg('./path-to/media-file.mkv', './path-to/playlist.m3u8')
 
-// Return an array of segment lengths
-hpg('./path-to/media-file.mkv', 3)
+// Return an array of segment lengths with target length 6
+hpg('./path-to/media-file.mkv', null, { segmentLength: 6 })
 
-// or (target segment length defaults to 3)
+// or target length defaults to 3
 hpg('./path-to/media-file.mkv')
+
 
 // If generating multiple playlists for multiple qualities, keyframes only need to be fetched once, so you should use this method:
 var segments = await hpg.segments('./path-to/media-file.mkv', 3)
@@ -63,13 +64,16 @@ var keyframes = await hpg.extract('./path-to/media.mkv')
 
 ```bash
 # Write the .m3u8 playlist to the output file
-hls-playlist-generator "C:/Path with spaces/movie.mkv" "./playlist.m3u8" 3
+hls-playlist-generator "C:/Path with spaces/movie.mkv" "./playlist.m3u8"
 
 # Return an array of segment lengths
-hls-playlist-generator "C:/Path with spaces/movie.mkv" 3
-
-# or (target segment length defaults to 3)
 hls-playlist-generator "C:/Path with spaces/movie.mkv"
+
+# or specify segment length
+hls-playlist-generator "C:/Path with spaces/movie.mkv" --segment-length 6
+
+# Get all available options
+hls-playlist-generator -h
 ```
 
 <img src="https://raw.githubusercontent.com/mcoop320/hls-playlist-generator/master/cli_sample.png" />
