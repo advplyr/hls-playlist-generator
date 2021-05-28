@@ -1,6 +1,6 @@
 # HLS Playlist Generator
 
-Gets accurate HLS segment lengths for a video file by using keyframes, then optionally generates an HLS .m3u8 playlist.
+Calculates HLS segment lengths using key frames and optionally generates m3u8 playlist.
 
 ### Background
 When direct streaming a video via HLS, the segment lengths are determined by the keyframes.

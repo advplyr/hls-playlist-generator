@@ -1,11 +1,10 @@
 {
   "name": "hls-playlist-generator",
   "version": "1.0.13",
-  "description": "Gets accurate HLS segment lengths for a video file by using key frames, then optionally generates an HLS .m3u8 playlist.",
+  "description": "Calculates HLS segment lengths using key frames and optionally generates m3u8 playlist.",
   "main": "index.js",
   "scripts": {
-    "start": "node cli",
-    "dev": "set IS_DEBUG=1&&node cli"
+    "start": "node cli"
   },
   "bin": {
     "hls-playlist-generator": "cli.js",
