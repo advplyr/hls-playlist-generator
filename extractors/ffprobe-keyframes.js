@@ -8,7 +8,7 @@ async function getKeyFrames(filepath) {
     '-skip_frame', 'nokey',
     '-show_entries', 'format=duration',
     '-show_entries', 'stream=duration',
-    '-show_entries', 'packet=pts_time,flags',
+    '-show_entries', 'packet=pts_time,dts_time,flags',
     '-select_streams', 'v',
     '-of', 'csv',
     path
@@ -24,7 +24,14 @@ async function getKeyFrames(filepath) {
   var streamline = keyframelines.pop().split(',')
   var stream_duration = Number(streamline[1])
 
-  var keyframes = keyframelines.filter(l => l.includes('K_')).map(l => Number(l.split(',')[1])).filter(l => !isNaN(l))
+  keyframelines = keyframelines.filter(l => l.includes('K_'))
+  var keyframes = keyframelines.map(l => {
+    var lineparams = l.split(',')
+    // Use pts_time first, fallback to dts_time
+    if (!isNaN(lineparams[1])) return Number(lineparams[1])
+    else if (!isNaN(lineparams[2])) return Number(lineparams[2])
+    return null
+  }).filter(l => l !== null)
   return {
     keyframes,
     duration: stream_duration || format_duration
