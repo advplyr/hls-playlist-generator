@@ -64,6 +64,8 @@ module.exports = async (filepath_input, outputpath_input = null, options = {}) =
   if (options.ffprobePath !== undefined) {
     process.env.FFPROBE_PATH = options.ffprobePath
   }
+
+  Logger.debug('Options', options)
   var print_keyframes = options.keyframes
   var segment_name = options.segmentName
   var segment_length = (options.segmentLength && !isNaN(options.segmentLength)) ? Number(options.segmentLength) : 3
@@ -71,10 +73,12 @@ module.exports = async (filepath_input, outputpath_input = null, options = {}) =
   var filepath = Path.resolve(filepath_input)
   var outputpath = outputpath_input ? Path.resolve(outputpath_input) : null
 
+  Logger.debug('Env Vars', prcoess.env.IS_DEBUG, process.env.FFPROBE_PATH)
+
   var details = await ffprobeDetails(filepath)
   var keyframes = await extractKeyframes(filepath, details)
   if (print_keyframes) {
-    console.log('Keyframes', keyframes)
+    Logger.info('Keyframes', keyframes)
   }
 
   var segmentLengths = generator.getSegmentLengths(keyframes, details.duration, segment_length)
