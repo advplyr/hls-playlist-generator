@@ -7,8 +7,7 @@
     "start": "node cli"
   },
   "bin": {
-    "hls-playlist-generator": "cli.js",
-    "@mcoop320/hls-playlist-generator": "cli.js"
+    "hls-playlist-generator": "cli.js"
   },
   "repository": {
     "type": "git",
