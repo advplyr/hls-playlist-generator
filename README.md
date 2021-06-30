@@ -58,7 +58,7 @@ await Promise.all([v480p, v720p, v1080p])
 var keyframes = await hpg.extract('./path-to/media.mkv')
 ```
 
-<img src="https://raw.githubusercontent.com/mcoop320/hls-playlist-generator/master/m3u8_sample.png" />
+<img src="https://raw.githubusercontent.com/advplyr/hls-playlist-generator/master/m3u8_sample.png" />
 
 ## CLI Usage
 
@@ -76,7 +76,7 @@ hls-playlist-generator "C:/Path with spaces/movie.mkv" --segment-length 6
 hls-playlist-generator -h
 ```
 
-<img src="https://raw.githubusercontent.com/mcoop320/hls-playlist-generator/master/cli_sample.png" />
+<img src="https://raw.githubusercontent.com/advplyr/hls-playlist-generator/master/cli_sample.png" />
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
