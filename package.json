@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mcoop320/hls-playlist-generator.git"
+    "url": "https://github.com/advplyr/hls-playlist-generator.git"
   },
   "keywords": [
     "hls",
@@ -20,7 +20,7 @@
     "vod",
     "ffprobe"
   ],
-  "author": "mcoop320",
+  "author": "advplyr",
   "license": "MIT",
   "dependencies": {
     "commander": "^7.2.0",
